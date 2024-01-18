@@ -5,7 +5,7 @@ keywords:
   - blocklet
   - react
 group: dapp
-did: blocklet init v1.16.20-beta-e32e39d7
+did: z8iZkzn7MwgC2grQ1TZyxeF89k9SKmPdPVn68
 main: api/dist/index.js
 author:
   name: Felix
@@ -25,22 +25,22 @@ interfaces:
   - type: web
     name: publicUrl
     path: /
-    prefix: "*"
+    prefix: '*'
     port: BLOCKLET_PORT
     protocol: http
-community: ""
-documentation: ""
-homepage: ""
-license: ""
+community: ''
+documentation: ''
+homepage: ''
+license: ''
 payment:
   price: []
   share: []
 timeout:
   start: 60
 requirements:
-  server: ">=1.6.29"
-  os: "*"
-  cpu: "*"
+  server: '>=1.6.29'
+  os: '*'
+  cpu: '*'
 scripts:
   preStart: node api/hooks/pre-start.js
   dev: npm run start

@@ -10,6 +10,7 @@ import fallback from '@blocklet/sdk/lib/middlewares/fallback';
 
 import logger from './libs/logger';
 import routes from './routes';
+import { socketServer, startThoughtLoop } from './socket';
 
 dotenv.config();
 
@@ -42,6 +43,11 @@ if (isProduction) {
 }
 
 const port = parseInt(process.env.BLOCKLET_PORT!, 10);
+
+export default socketServer.listen(4000, () => {
+  startThoughtLoop();
+  console.log('socketio and express server listening on *:' + 4000);
+});
 
 export const server = app.listen(port, (err?: any) => {
   if (err) throw err;

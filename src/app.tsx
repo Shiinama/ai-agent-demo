@@ -1,30 +1,53 @@
-import './app.css';
+import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
 
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+interface UpdateData {
+  longTermMemory: string[][];
+  shortTermMemory: string;
+  subconsciousness: string;
+  thought: string;
+  consciousness: string;
+  answer: string;
+  log: string;
+}
 
-import About from './pages/about';
-import Home from './pages/home';
+const socket = io('http://localhost:4000');
 
-function App() {
+const App = () => {
+  const [input, setInput] = useState('');
+  const [log, setLog] = useState('');
+
+  useEffect(() => {
+    socket.on('update', (data: UpdateData) => {
+      console.log(data, '111');
+      setLog(data.log);
+    });
+
+    return () => {
+      socket.off('update');
+    };
+  }, []);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  const handleFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    socket.emit('userInput', input);
+    setInput('');
+  };
+
   return (
-    <div className="app">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+    <div className="App">
+      <form onSubmit={handleFormSubmit}>
+        <input type="text" value={input} onChange={handleInputChange} />
+        <button type="submit">Submit</button>
+      </form>
+
+      <pre>{log}</pre>
     </div>
   );
-}
+};
 
-export default function WrappedApp() {
-  // While the blocklet is deploy to a sub path, this will be work properly.
-  const basename = window?.blocklet?.prefix || '/';
-
-  return (
-    <Router basename={basename}>
-      <App />
-    </Router>
-  );
-}
+export default App;
